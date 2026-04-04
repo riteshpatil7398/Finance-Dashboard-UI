@@ -12,7 +12,9 @@ import {
   Eye,
   Sun,
   Moon,
-  Download
+  Download,
+  Menu,
+  X
 } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { useDashboard } from '../context/DashboardContext';
@@ -25,30 +27,54 @@ const navItems = [
   { icon: Settings, label: 'Settings', active: false },
 ];
 
-export const Sidebar = () => {
+interface SidebarProps {
+  isMobileOpen: boolean;
+  onClose: () => void;
+}
+
+export const Sidebar = ({ isMobileOpen, onClose }: SidebarProps) => {
   const { role, setRole } = useDashboard();
 
   return (
-    <aside className={cn(
-      "w-64 border-r transition-all duration-500 flex flex-col h-screen sticky top-0",
-      role === 'admin' 
-        ? "bg-white dark:bg-slate-900 border-indigo-100 dark:border-indigo-900/30" 
-        : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
-    )}>
-      <div className="p-6 flex items-center gap-3">
-        <div className={cn(
-          "w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg transition-all duration-500",
-          role === 'admin' ? "bg-indigo-600 shadow-indigo-200" : "bg-slate-600 shadow-slate-200"
-        )}>
-          <Wallet size={24} />
+    <>
+      <div
+        className={cn(
+          "fixed inset-0 bg-slate-900/50 z-20 transition-opacity duration-300 md:hidden",
+          isMobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        )}
+        onClick={onClose}
+      />
+
+      <aside className={cn(
+        "fixed inset-y-0 left-0 z-30 w-72 max-w-[80vw] border-r bg-white dark:bg-slate-900 transition-transform duration-300 md:static md:translate-x-0 md:w-64 md:border-r md:flex md:h-screen md:sticky md:top-0",
+        isMobileOpen ? "translate-x-0" : "-translate-x-full",
+        role === 'admin' 
+          ? "border-indigo-100 dark:border-indigo-900/30" 
+          : "border-slate-200 dark:border-slate-800"
+      )}>
+        <div className="flex items-center justify-between p-6 md:hidden">
+          <div className="flex items-center gap-3">
+            <div className={cn(
+              "w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg transition-all duration-500",
+              role === 'admin' ? "bg-indigo-600 shadow-indigo-200" : "bg-slate-600 shadow-slate-200"
+            )}>
+              <Wallet size={24} />
+            </div>
+            <span className={cn(
+              "text-xl font-bold transition-all duration-500",
+              role === 'admin' ? "text-indigo-600 dark:text-indigo-400" : "text-slate-700 dark:text-slate-300"
+            )}>
+              FinTrack
+            </span>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            aria-label="Close menu"
+          >
+            <X size={20} />
+          </button>
         </div>
-        <span className={cn(
-          "text-xl font-bold transition-all duration-500",
-          role === 'admin' ? "text-indigo-600 dark:text-indigo-400" : "text-slate-700 dark:text-slate-300"
-        )}>
-          FinTrack
-        </span>
-      </div>
 
       <nav className="flex-1 px-4 py-4 space-y-1">
         {navItems.map((item) => (
@@ -104,7 +130,11 @@ export const Sidebar = () => {
   );
 };
 
-export const TopNav = () => {
+interface TopNavProps {
+  onMenuToggle: () => void;
+}
+
+export const TopNav = ({ onMenuToggle }: TopNavProps) => {
   const { searchQuery, setSearchQuery, darkMode, toggleDarkMode, transactions } = useDashboard();
 
   const exportToCSV = () => {
@@ -135,8 +165,19 @@ export const TopNav = () => {
   };
 
   return (
-    <header className="h-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 sticky top-0 z-10">
-      <div className="relative w-96">
+    <header className="h-auto md:h-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10 px-4 md:px-8 py-4 md:py-0">
+      <div className="flex w-full items-center justify-between gap-4 mb-4 md:mb-0 md:hidden">
+        <button
+          onClick={onMenuToggle}
+          className="p-2 rounded-xl text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+          aria-label="Open menu"
+        >
+          <Menu size={20} />
+        </button>
+        <span className="text-base font-semibold text-slate-900 dark:text-slate-100">FinTrack</span>
+      </div>
+
+      <div className="relative w-full max-w-full md:w-96">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" size={18} />
         <input 
           type="text" 
@@ -147,7 +188,7 @@ export const TopNav = () => {
         />
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center justify-end gap-3">
         <button 
           onClick={exportToCSV}
           className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl text-sm font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"

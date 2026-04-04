@@ -41,6 +41,7 @@ const DashboardContent = () => {
   } = useDashboard();
 
   const [isAdding, setIsAdding] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [newTx, setNewTx] = useState({
     merchant: '',
@@ -109,12 +110,12 @@ const DashboardContent = () => {
         )}
       </AnimatePresence>
 
-      <Sidebar />
+      <Sidebar isMobileOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       
       <div className="flex-1 flex flex-col">
-        <TopNav />
+        <TopNav onMenuToggle={() => setIsSidebarOpen((prev) => !prev)} />
         
-        <main className="p-8 space-y-8 max-w-7xl mx-auto w-full">
+        <main className="p-6 md:p-8 space-y-8 max-w-7xl mx-auto w-full">
           {/* Header Section */}
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
