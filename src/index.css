@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  .dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-white font-sans text-slate-900 antialiased transition-colors duration-300;
+  }
+
+  .dark body {
+    @apply bg-slate-950 text-slate-50;
+  }
+}
+
+/* Explicitly define dark variant for class-based dark mode in Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
