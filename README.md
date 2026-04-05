@@ -3,11 +3,7 @@
 </div> -->
 https://1drv.ms/v/c/d60757a85ef94608/IQBKukNzNeJwTIfQQJmLNw4bAbhA87Dh4Ra6foDe-hKwHXQ?e=VvhYNJ
 
-# Run and deploy your AI Studio app
 
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/fd73f79a-156d-4667-94d9-bb525a670f75
 
 ## Run Locally
 
